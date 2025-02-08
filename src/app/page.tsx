@@ -12,13 +12,13 @@ export default function Home() {
             </div>
             <div className="flex space-x-4">
               <Link
-                href="/login"
+                href="/dashboard"
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-gray-700 bg-gray-50 hover:bg-gray-100"
               >
                 Login
               </Link>
               <Link
-                href="/signup"
+                href="/dashboard"
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
               >
                 Sign Up
