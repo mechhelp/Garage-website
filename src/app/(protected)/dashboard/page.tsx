@@ -10,6 +10,9 @@ import { FC } from 'react';
 import { LayoutDashboard, FileText, Package, Users, BarChart3, Globe, Users2, Settings } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useState } from 'react';
+
+import { cn } from "@/lib/utils";
 
 interface MotionDivProps extends HTMLMotionProps<"div"> {
   children?: React.ReactNode;
@@ -48,6 +51,7 @@ const recentBookings = [
 ];
 
 const Dashboard: FC = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 }
@@ -55,12 +59,38 @@ const Dashboard: FC = () => {
 
   return (
     <TooltipProvider>
-      <div className="flex h-screen">
-      {/* Sidebar */}
-      <div className="w-64 bg-background border-r flex flex-col">
-        <div className="p-6">
-          <h2 className="text-2xl font-bold text-primary">MechHelp</h2>
-        </div>
+      <div className="flex h-screen relative">
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-background border"
+        >
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <line x1="3" y1="12" x2="21" y2="12"></line>
+  <line x1="3" y1="6" x2="21" y2="6"></line>
+  <line x1="3" y1="18" x2="21" y2="18"></line>
+</svg>
+        </button>
+
+        {/* Sidebar */}
+        <div
+          className={cn(
+            "fixed lg:static inset-y-0 left-0 z-40 w-64 bg-background border-r flex flex-col transform transition-transform duration-200 ease-in-out lg:transform-none",
+            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          )}
+        >
+          <div className="p-6 flex items-center justify-between">
+            <h2 className="text-2xl font-bold text-primary">MechHelp</h2>
+            <button
+              onClick={() => setIsSidebarOpen(false)}
+              className="lg:hidden p-2 rounded-md hover:bg-accent"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
         <nav className="flex-1 px-4 space-y-2">
           <Tooltip>
             <TooltipTrigger asChild>
@@ -118,9 +148,17 @@ const Dashboard: FC = () => {
         </nav>
       </div>
 
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 lg:hidden z-30"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Main Content */}
-      <div className="flex-1 overflow-auto">
-        <div className="p-6 space-y-6">
+      <div className="flex-1 overflow-auto w-full p-4 lg:p-6 pt-16 lg:pt-6">
+        <div className="max-w-7xl mx-auto space-y-6">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold">Hi, V.S Car Care</h1>
             <p className="text-sm text-muted-foreground">Let&apos;s check your Garage today</p>
